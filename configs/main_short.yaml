@@ -1,0 +1,10 @@
+# 追加評価2：5より短いチャンクの効果を確認する
+name: main
+policy: HuggingFaceVLA/smolvla_libero
+suites: [libero_spatial, libero_object, libero_goal, libero_10]
+task_ids: null
+n_action_steps: [2]
+seeds: [1000, 2000, 3000]
+n_episodes: 10
+batch_size: 1
+extra_args: []

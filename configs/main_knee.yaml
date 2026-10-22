@@ -1,0 +1,10 @@
+# 追加評価1：成功率が落ち始める点（10と25の間）を特定する
+name: main
+policy: HuggingFaceVLA/smolvla_libero
+suites: [libero_spatial, libero_object, libero_goal, libero_10]
+task_ids: null
+n_action_steps: [15, 20]
+seeds: [1000, 2000, 3000]
+n_episodes: 10
+batch_size: 1
+extra_args: []
