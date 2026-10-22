@@ -1,0 +1,11 @@
+sheet,task_id,task,seed,episode,ref_len,cmp_len,failure_type,confidence,note
+task0_seed1000_ep1.png,0,open the middle drawer of the cabinet,1000,1,119,300,F,低,引き出しは出ているが条件未達（開き不足か別の段）。要確認
+task1_seed1000_ep5.png,1,put the bowl on the stove,1000,5,90,300,A,高,ボウルは元の位置のまま、空のままコンロへ
+task2_seed1000_ep1.png,2,put the wine bottle on top of the cabinet,1000,1,104,300,A,高,ワインボトルは元の位置のまま
+task3_seed1000_ep1.png,3,open the top drawer and put the bowl inside,1000,1,171,300,A,中,引き出しは開けたが、ボウルを掴み損ねる（2段目の失敗）
+task4_seed2000_ep1.png,4,put the bowl on top of the cabinet,2000,1,82,300,A,高,ボウルは元の位置のまま
+task5_seed1000_ep0.png,5,push the plate to the front of the stove,1000,0,121,300,F,中,皿を押したが移動量が足りない
+task6_seed1000_ep0.png,6,put the cream cheese in the bowl,1000,0,88,300,D,中,クリームチーズを掴んだが、ボウルに入れられず保持したまま
+task7_seed1000_ep4.png,7,turn on the stove,1000,4,69,300,F,中,つまみ付近で停滞し、コンロが点かない
+task8_seed1000_ep6.png,8,put the bowl on the plate,1000,6,83,300,D,中,ボウルを皿まで運んだが傾いて載り切らない
+task9_seed1000_ep0.png,9,put the wine bottle on the rack,1000,0,140,300,C,中,ワインボトルを運搬中に落とし、横倒し

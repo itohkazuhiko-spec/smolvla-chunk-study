@@ -1,0 +1,11 @@
+sheet,task_id,task,seed,episode,ref_len,cmp_len,failure_type,confidence,note
+task0_seed1000_ep0.png,0,pick up the black bowl between the plate and the ramekin and place it on the plate,1000,0,76,280,D,中,ボウルを皿の位置まで運んだが、皿の縁で傾いたまま
+task1_seed1000_ep0.png,1,pick up the black bowl next to the ramekin and place it on the plate,1000,0,114,280,X,低,最終状態でボウルの位置が判別できない。動画で要確認
+task2_seed1000_ep9.png,2,pick up the black bowl from table center and place it on the plate,1000,9,90,280,A,高,中央のボウルは元の位置のまま、空のまま皿へ
+task3_seed1000_ep0.png,3,pick up the black bowl on the cookie box and place it on the plate,1000,0,80,280,A,高,クッキー箱上のボウルは残ったまま
+task4_seed1000_ep4.png,4,pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate,1000,4,119,280,A,高,引き出し内のボウルは残ったまま
+task5_seed1000_ep0.png,5,pick up the black bowl on the ramekin and place it on the plate,1000,0,90,280,D,中,ボウルを皿付近まで運んだが傾いて載らない
+task6_seed1000_ep8.png,6,pick up the black bowl next to the cookie box and place it on the plate,1000,8,108,280,A,高,クッキー箱横のボウルは残ったまま
+task7_seed1000_ep0.png,7,pick up the black bowl on the stove and place it on the plate,1000,0,117,280,C,中,コンロから持ち上げたが、途中でテーブルに落とす（step93）
+task8_seed1000_ep1.png,8,pick up the black bowl next to the plate and place it on the plate,1000,1,85,280,D,中,皿の上でボウルが傾き、載り切らない
+task9_seed1000_ep4.png,9,pick up the black bowl on the wooden cabinet and place it on the plate,1000,4,118,280,A,高,キャビネット上のボウルは残ったまま

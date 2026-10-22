@@ -1,0 +1,11 @@
+sheet,task_id,task,seed,episode,ref_len,cmp_len,failure_type,confidence,note
+task0_seed3000_ep2.png,0,put both the alphabet soup and the tomato sauce in the basket,3000,2,301,520,A,中,1つ目の物体を掴み損ね、カゴは空のまま
+task1_seed1000_ep0.png,1,put both the cream cheese box and the butter in the basket,1000,0,334,520,A,高,クリームチーズは元の位置のまま
+task2_seed1000_ep0.png,2,turn on the stove and put the moka pot on it,1000,0,260,520,A,中,コンロ点火は成功、モカポットを掴み損ねる（2段目）
+task3_seed1000_ep0.png,3,put the black bowl in the bottom drawer of the cabinet and close it,1000,0,222,520,A,高,ボウルはテーブルに残ったまま
+task4_seed1000_ep1.png,4,put the white mug on the left plate and put the yellow and white mug on the right plate,1000,1,205,520,C,低,白マグを持ち上げたが元の付近に戻る（落下か）。要確認
+task5_seed1000_ep0.png,5,pick up the book and place it in the back compartment of the caddy,1000,0,301,520,A,高,本は一度も動かず、空のままキャディへ
+task6_seed1000_ep1.png,6,put the white mug on the plate and put the chocolate pudding to the right of the plate,1000,1,212,520,A,中,マグは皿に載せたが、プリンを掴み損ねる（2段目）
+task7_seed2000_ep5.png,7,put both the alphabet soup and the cream cheese box in the basket,2000,5,267,520,A,高,2つの缶とも元の位置のまま
+task8_seed1000_ep3.png,8,put both moka pots on the stove,1000,3,363,520,B,中,1つ目のポットで掴み直しを繰り返し、時間切れ
+task9_seed1000_ep0.png,9,put the yellow and white mug in the microwave and close it,1000,0,308,520,D,中,マグを電子レンジまで運んだが入れられず、扉付近で傾く

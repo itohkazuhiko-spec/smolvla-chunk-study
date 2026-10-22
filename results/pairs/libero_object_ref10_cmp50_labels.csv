@@ -1,0 +1,11 @@
+sheet,task_id,task,seed,episode,ref_len,cmp_len,failure_type,confidence,note
+task0_seed1000_ep1.png,0,pick up the alphabet soup and place it in the basket,1000,1,140,280,A,高,step70で空のグリッパー。カゴ付近で停滞
+task1_seed1000_ep0.png,1,pick up the cream cheese and place it in the basket,1000,0,129,280,A,高,掴み損ね後、空のままカゴ付近で停滞
+task2_seed1000_ep0.png,2,pick up the salad dressing and place it in the basket,1000,0,122,280,A,高,掴み損ね後、空のままカゴ付近で停滞
+task3_seed1000_ep3.png,3,pick up the bbq sauce and place it in the basket,1000,3,127,280,A,高,掴み損ね後、空のままカゴ付近で停滞
+task4_seed1000_ep0.png,4,pick up the ketchup and place it in the basket,1000,0,146,280,A,高,掴み損ね後、空のままカゴ付近で停滞
+task5_seed1000_ep3.png,5,pick up the tomato sauce and place it in the basket,1000,3,134,280,B,中,物体の群れの上で往復し続け、後半にボトルを倒す
+task6_seed1000_ep3.png,6,pick up the butter and place it in the basket,1000,3,195,280,A,高,バターは元の位置のまま、空のグリッパーでカゴへ
+task7_seed1000_ep0.png,7,pick up the milk and place it in the basket,1000,0,184,280,A,高,牛乳は元の位置のまま、カゴ付近で停滞
+task8_seed1000_ep0.png,8,pick up the chocolate pudding and place it in the basket,1000,0,141,280,A,高,プリンは元の位置のまま、カゴ付近で停滞
+task9_seed1000_ep2.png,9,pick up the orange juice and place it in the basket,1000,2,110,280,A,中,オレンジジュースは元の位置付近、空のままカゴへ
