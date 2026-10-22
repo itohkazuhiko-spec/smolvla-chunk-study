@@ -1,3 +1,7 @@
 timestamp,experiment,suite,n_action_steps,seed,n_episodes_per_task,pc_success,n_episodes,wall_s,status,repo_commit,lerobot,torch,cuda,gpu
 2026-10-22T21:00:37,pilot,libero_spatial,10,1000,2,50.0,2,32.4,ok,unknown,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
 2026-10-22T21:01:07,pilot,libero_spatial,50,1000,2,50.0,2,29.1,ok,unknown,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-22T21:18:15,main,libero_spatial,5,1000,10,58.0,100,862.1,ok,0a62204,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-22T21:27:18,main,libero_spatial,10,1000,10,66.0,100,543.1,ok,0a62204,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-22T21:34:31,main,libero_spatial,25,1000,10,56.0,100,433.3,ok,0a62204,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-22T21:40:57,main,libero_spatial,50,1000,10,55.0,100,385.4,ok,0a62204,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition

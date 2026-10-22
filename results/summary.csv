@@ -1,3 +1,5 @@
 experiment,suite,n_action_steps,n_episodes,n_success,pc_success,ci95_low,ci95_high,n_seeds,seed_std
-pilot,libero_spatial,10,2,1,50.0,9.5,90.5,1,
-pilot,libero_spatial,50,2,1,50.0,9.5,90.5,1,
+main,libero_spatial,5,100,58,58.0,48.2,67.2,1,
+main,libero_spatial,10,100,66,66.0,56.3,74.5,1,
+main,libero_spatial,25,100,56,56.0,46.2,65.3,1,
+main,libero_spatial,50,100,55,55.0,45.2,64.4,1,
