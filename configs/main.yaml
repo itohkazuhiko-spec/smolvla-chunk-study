@@ -4,7 +4,7 @@ policy: HuggingFaceVLA/smolvla_libero
 suites: [libero_spatial]
 task_ids: null
 n_action_steps: [5, 10, 25, 50]
-seeds: [1000, 2000, 3000]
+seeds: [1000]
 n_episodes: 10
 batch_size: 1
 extra_args: []
