@@ -1,0 +1,5 @@
+experiment,suite,n_action_steps,seed,task_id,episode,success
+pilot,libero_spatial,10,1000,0,0,True
+pilot,libero_spatial,10,1000,0,1,False
+pilot,libero_spatial,50,1000,0,0,False
+pilot,libero_spatial,50,1000,0,1,True

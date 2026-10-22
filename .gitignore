@@ -1,0 +1,4 @@
+results/raw/**/videos/
+*.log
+__pycache__/
+lerobot/

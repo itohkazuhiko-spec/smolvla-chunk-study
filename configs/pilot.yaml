@@ -1,0 +1,10 @@
+# パイプライン動作確認用（数分で終わる最小構成）
+name: pilot
+policy: HuggingFaceVLA/smolvla_libero
+suites: [libero_spatial]
+task_ids: [0]            # null にするとスイート内の全タスク
+n_action_steps: [10, 50]
+seeds: [1000]
+n_episodes: 2            # 1タスクあたりのエピソード数
+batch_size: 1
+extra_args: []

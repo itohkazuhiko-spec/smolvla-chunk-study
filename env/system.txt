@@ -1,0 +1,7 @@
+date: 2026-10-22T21:00:04+09:00
+os: Ubuntu 24.04.5 LTS
+kernel: 6.8.0-147-generic
+gpu: NVIDIA RTX PRO 4000 Blackwell SFF Edition, 580.178.04, 24467 MiB
+torch: 2.11.0+cu130 cuda: 13.0
+lerobot: 0.6.1
+MUJOCO_GL: egl
