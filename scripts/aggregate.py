@@ -88,6 +88,8 @@ def paired_tests(df: pd.DataFrame, ref: int) -> pd.DataFrame:
             if nas == ref:
                 continue
             pair = w[[ref, nas]].dropna().astype(bool)
+            if pair.empty:  # その条件の結果がまだ無いスイートは比較しない（Holm 補正の回数にも数えない）
+                continue
             b = int((pair[ref] & ~pair[nas]).sum())
             c = int((~pair[ref] & pair[nas]).sum())
             rows.append({
@@ -143,6 +145,10 @@ def main() -> None:
     print("== スイート別 ==\n" + summ.to_string(index=False))
 
     overall = summarize(df, ["n_action_steps"])
+    overall["n_suites"] = overall["n_action_steps"].map(df.groupby("n_action_steps")["suite"].nunique())
+    complete = overall["n_suites"] == df["suite"].nunique()
+    if not complete.all():
+        print("※ 全スイートが揃っていない条件があります（n_suites 列）。合算値はそのスイートだけの平均なので他と比較できません。図の合算線からも除外します。")
     if not cost.empty:
         overall = overall.merge(cost.groupby("n_action_steps")["s_per_episode"].mean().round(1).reset_index(),
                                 on="n_action_steps", how="left")
@@ -160,7 +166,8 @@ def main() -> None:
         ax.errorbar(g["n_action_steps"], g["pc_success"],
                     yerr=[g["pc_success"] - g["ci95_low"], g["ci95_high"] - g["pc_success"]],
                     marker="o", capsize=3, alpha=0.8, label=suite)
-    ax.plot(overall["n_action_steps"], overall["pc_success"], "k--", marker="s", lw=2, label="all suites")
+    oc = overall[complete]
+    ax.plot(oc["n_action_steps"], oc["pc_success"], "k--", marker="s", lw=2, label="all suites")
     ax.set(xlabel="n_action_steps", ylabel="success rate (%)", ylim=(0, 100), xticks=xs,
            title="SmolVLA on LIBERO: success vs. n_action_steps (95% CI)")
     ax.grid(alpha=0.3)
@@ -171,8 +178,8 @@ def main() -> None:
     # 図2: 計算コスト（1エピソードあたり秒）と成功率
     if "s_per_episode" in overall:
         fig, ax = plt.subplots(figsize=(6, 4.5))
-        ax.plot(overall["s_per_episode"], overall["pc_success"], "o-")
-        for _, r in overall.iterrows():
+        ax.plot(oc["s_per_episode"], oc["pc_success"], "o-")
+        for _, r in oc.iterrows():
             ax.annotate(f"n={int(r['n_action_steps'])}", (r["s_per_episode"], r["pc_success"]),
                         textcoords="offset points", xytext=(6, 6))
         ax.set(xlabel="wall time per episode (s)", ylabel="success rate (%)",
