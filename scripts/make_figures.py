@@ -102,36 +102,44 @@ def fig2(overall: pd.DataFrame) -> None:
 
 
 def fig3() -> None:
+    """失敗の型：目視分類（pairs/*_labels.csv）と物体位置による自動分類（auto_labels_objects.csv）をスイートごとに上下に並べる。"""
     files = glob.glob(str(RES / "pairs" / "*_labels.csv"))
-    if not files:
-        print("skip fig3: no labels")
+    auto_csv = RES / "auto_labels_objects.csv"
+    if not files or not auto_csv.exists():
+        print("skip fig3: labels or auto_labels_objects.csv not found")
         return
-    d = pd.concat([pd.read_csv(f).assign(suite=Path(f).name.split("_ref")[0]) for f in files], ignore_index=True)
-    d = d[d["failure_type"].notna() & (d["failure_type"] != "")]
-    types = [("A", "A: grasp miss, continues empty / stalls"), ("D", "D: transported but placement fails"),
-             ("C", "C: dropped during transport"), ("F", "F: articulated-object operation fails"),
-             ("B", "B: hesitates / repeated re-grasp"), ("X", "X: undetermined")]
-    tcol = {"A": "#2a78d6", "D": "#eb6834", "C": "#1baf7a", "F": "#eda100", "B": "#e87ba4", "X": "#b5b3ad"}
-    ct = pd.crosstab(d["suite"], d["failure_type"]).reindex(SUITES).fillna(0)
-    fig, ax = plt.subplots(figsize=(7.2, 3.6))
-    left = pd.Series(0.0, index=ct.index)
-    for k, lab in types:
-        if k not in ct:
-            continue
-        v = ct[k]
-        ax.barh([s.replace("libero_", "") for s in ct.index], v, left=left, color=tcol[k], label=lab,
-                edgecolor="white", linewidth=2, height=0.62)
-        for i, (val, l0) in enumerate(zip(v, left)):
-            if val >= 2:
-                ax.text(l0 + val / 2, i, f"{int(val)}", ha="center", va="center", color="white", fontsize=9, fontweight="bold")
-        left += v
+    man = pd.concat([pd.read_csv(f).assign(suite=Path(f).name.split("_ref")[0]) for f in files], ignore_index=True)
+    man["c"] = man["failure_type"].map({"A": "grasp miss", "C": "drop", "D": "placement fails"}).fillna("other")
+    auto = pd.read_csv(auto_csv)
+    j = auto[auto.n_action_steps == 10].merge(auto[auto.n_action_steps == 50], on=["suite", "seed", "task_id", "episode"], suffixes=("_10", "_50"))
+    pp = j[j.success_10 & ~j.success_50 & (j.category_50 != "no_grasp_task")].copy()
+    pp["c"] = pp["category_50"].map({"MISS": "grasp miss", "DROP": "drop", "PLACE": "placement fails", "OTHER": "other"})
+    cats = ["grasp miss", "drop", "placement fails", "other"]
+    col = {"grasp miss": "#2a78d6", "drop": "#1baf7a", "placement fails": "#eb6834", "other": "#b5b3ad"}
+    fig, ax = plt.subplots(figsize=(7.4, 4.6))
+    y, yt, yl, first = 0.0, [], [], True
+    for s in SUITES + ["all"]:
+        for name, d in [("visual", man), ("auto", pp)]:
+            dd = d if s == "all" else d[d.suite == s]
+            n, vc, left = len(dd), dd["c"].value_counts(), 0.0
+            for c in cats:
+                x = 100 * vc.get(c, 0) / n if n else 0
+                ax.barh(y, x, left=left, color=col[c], edgecolor="white", linewidth=2, height=0.8, label=c if first else None)
+                if x >= 12:
+                    ax.text(left + x / 2, y, f"{int(x + 0.5)}%", ha="center", va="center", color="white", fontsize=8, fontweight="bold")
+                left += x
+            first = False
+            yt.append(y)
+            yl.append(f"{s.replace('libero_', '')}  {name} (n={n})")
+            y += 1 if name == "visual" else 1.6
+    ax.set_yticks(yt)
+    ax.set_yticklabels(yl, fontsize=8.5)
     ax.invert_yaxis()
-    ax.set_xlabel("number of paired episodes (n_action_steps=10 success / 50 failure)")
+    ax.set_xlim(0, 100)
     ax.grid(axis="y", visible=False)
-    n = len(d)
-    a = int((d["failure_type"] == "A").sum())
-    ax.set_title(f"Failure types with long chunks: grasp misses dominate ({a}/{n})", loc="left", color=INK, fontsize=11)
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=2, fontsize=8)
+    ax.set_xlabel("share of failures (%)  -  paired episodes: n_action_steps=10 success / 50 failure")
+    ax.legend(ncol=4, loc="upper center", bbox_to_anchor=(0.45, -0.13), fontsize=8)
+    ax.set_title(f"Failure types with long chunks: visual ({len(man)} pairs) vs. automatic ({len(pp)} pairs)", loc="left", color=INK, fontsize=10.5)
     fig.savefig(OUT / "fig3_failure_types.png")
     plt.close(fig)
 
