@@ -58,8 +58,7 @@ def append_run(row: dict) -> None:
 
 
 def build_cmd(cfg: dict, suite: str, nas: int, seed: int, run_dir: Path) -> list[str]:
-    cmd = [
-        "lerobot-eval",
+    cmd = list(cfg.get("eval_cmd", ["lerobot-eval"])) + [
         f"--policy.path={cfg['policy']}",
         "--env.type=libero",
         f"--env.task={suite}",
