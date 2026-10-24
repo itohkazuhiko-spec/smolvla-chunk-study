@@ -1,0 +1,11 @@
+# 自動分類用：グリッパー状態を記録して再評価
+name: rec2
+policy: HuggingFaceVLA/smolvla_libero
+suites: [libero_spatial, libero_object, libero_goal, libero_10]
+task_ids: null
+n_action_steps: [10, 50]
+seeds: [1000]
+n_episodes: 10
+batch_size: 1
+extra_args: []
+eval_cmd: ["python", "scripts/eval_with_state_log.py"]

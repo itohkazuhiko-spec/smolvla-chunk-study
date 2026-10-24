@@ -1,0 +1,11 @@
+# 記録オプションの動作確認（グリッパーの状態が保存されるか）
+name: rec2_pilot
+policy: HuggingFaceVLA/smolvla_libero
+suites: [libero_spatial]
+task_ids: [0]
+n_action_steps: [50]
+seeds: [1000]
+n_episodes: 2
+batch_size: 1
+extra_args: []
+eval_cmd: ["python", "scripts/eval_with_state_log.py"]

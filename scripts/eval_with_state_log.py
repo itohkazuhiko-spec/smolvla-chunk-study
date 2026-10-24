@@ -7,6 +7,8 @@ LeRobot v0.6.1 の --eval.recording は LIBERO の観測キー（'robot_state/gr
 
 使い方: lerobot-eval と同じ引数で実行する（--eval.batch_size=1 が前提）
 出力: <output_dir>/state_log.jsonl（1行 = 1エピソード）
+  width: グリッパー開度, eef: 手先位置, cmd: グリッパー指令,
+  objects: タスクの注目物体（BDDL の obj_of_interest）ごとの位置の時系列
 """
 import atexit
 import json
@@ -26,10 +28,25 @@ def _state(obs: dict) -> tuple[float, list[float]]:
     return float(q[0] - q[1]), [round(float(x), 4) for x in rs["eef"]["pos"]]
 
 
+def _objects(self) -> dict[str, list[float]]:
+    """注目物体の現在位置を MuJoCo のシミュレーション状態から直接読む。"""
+    inner = getattr(self._env, "env", None)
+    if inner is None:
+        return {}
+    out = {}
+    for name in getattr(inner, "obj_of_interest", []):
+        bid = getattr(inner, "obj_body_id", {}).get(name)
+        if bid is not None:
+            out[name] = [round(float(v), 4) for v in inner.sim.data.body_xpos[bid]]
+    return out
+
+
 def reset(self, *args, **kwargs):
     obs, info = _orig_reset(self, *args, **kwargs)
     width, eef = _state(obs)
-    self._ep_log = {"task_id": int(self.task_id), "width": [round(width, 5)], "eef": [eef], "cmd": [], "success": False}
+    objs = _objects(self)
+    self._ep_log = {"task_id": int(self.task_id), "width": [round(width, 5)], "eef": [eef], "cmd": [],
+                    "success": False, "objects": {k: [v] for k, v in objs.items()}}
     EPISODES.append(self._ep_log)
     return obs, info
 
@@ -43,6 +60,8 @@ def step(self, action):
         ep["width"].append(round(width, 5))
         ep["eef"].append(eef)
         ep["cmd"].append(round(float(action[-1]), 3))  # グリッパー指令（LIBERO は -1=開く, +1=閉じる）
+        for k, v in _objects(self).items():
+            ep["objects"].setdefault(k, []).append(v)
         ep["success"] = ep["success"] or bool(info.get("is_success", False))
     return out
 
