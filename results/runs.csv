@@ -87,3 +87,11 @@ timestamp,experiment,suite,n_action_steps,seed,n_episodes_per_task,pc_success,n_
 2026-10-23T18:31:01,main,libero_10,2,3000,10,37.0,100,3783.5,ok,78d50fa,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
 2026-10-24T17:37:34,rec_pilot,libero_object,50,1000,2,,,21.7,failed(1),9d5ee73,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
 2026-10-24T17:43:41,rec_pilot,libero_object,50,1000,2,0.0,2,27.5,ok,9d5ee73,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T17:54:17,rec,libero_spatial,10,1000,10,66.0,100,502.6,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T18:00:29,rec,libero_spatial,50,1000,10,55.0,100,371.5,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T18:08:14,rec,libero_object,10,1000,10,83.0,100,465.8,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T18:13:52,rec,libero_object,50,1000,10,40.0,100,337.3,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T18:21:28,rec,libero_goal,10,1000,10,71.0,100,456.3,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T18:26:49,rec,libero_goal,50,1000,10,54.0,100,320.6,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T18:44:26,rec,libero_10,10,1000,10,40.0,100,1057.5,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
+2026-10-24T18:55:01,rec,libero_10,50,1000,10,23.0,100,635.2,ok,f6eba63,0.6.1,2.11.0+cu130,13.0,NVIDIA RTX PRO 4000 Blackwell SFF Edition
