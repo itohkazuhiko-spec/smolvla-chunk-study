@@ -55,7 +55,7 @@ def row(frames: np.ndarray, steps: list[int], title: str, color: tuple[int, int,
     d.text((10, 6), title, fill="white", font=font(19))
     f14 = font(16)
     for i, s in enumerate(steps):
-        fr = Image.fromarray(frames[s]).rotate(180).resize((W, W))  # LIBERO の画像は上下左右が反転している
+        fr = Image.fromarray(frames[s]).resize((W, W))  # lerobot-eval の動画はすでに正しい向き
         img.paste(fr, (i * W, HEAD))
         d.rectangle([i * W + 4, HEAD + 4, i * W + 104, HEAD + 28], fill=(0, 0, 0))
         d.text((i * W + 10, HEAD + 6), f"step {s}", fill="white", font=f14)

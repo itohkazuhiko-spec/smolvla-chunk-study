@@ -3,3 +3,4 @@ results/raw/**/videos/
 __pycache__/
 lerobot/
 *.tar.gz
+results/video/
