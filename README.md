@@ -23,10 +23,11 @@ Physical AI 講座 応用編1（MLOps・RobOps）の最終課題として作成�
 
 1. **成功率は「10以下で平坦、10を超えると単調に低下」**。2・5・10 の間に差はなく、15 から有意に低下、50 では約22ポイント低下。
 2. **計算コストを考えると 10 が最良**。2 は成功率が 10 と同等だが推論回数は5倍。10 は「成功率を落とさずに推論回数を最小にできる上限」（図2）。
-3. **長いチャンクの失敗は主に「掴み損ねを修正できない」ことによる**。10では成功し50では失敗した40組を分類すると、
-   25組（63%）が「掴み損ね → 空のまま運搬 → 停滞」だった（図3）。低下の始まる点はスイートで異なる（spatial は15、object・goal は25、libero_10 は緩やか）。
+3. **長いチャンクの失敗は主に「掴み損ねを修正できない」ことによる**。10では成功し50では失敗した組を、
+   目視（40組）と、グリッパー開度・物体位置のログによる自動分類（108組）で調べると、掴み損ねがそれぞれ63%・67%を占めた（図3）。
+   50で増えた失敗64件のうち42件が掴み損ねの増加だった。低下の始まる点はスイートで異なる（spatial は15、object・goal は25、libero_10 は緩やか）。
 
-| 図2：推論コストと成功率 | 図3：長いチャンクでの失敗の型 |
+| 図2：推論コストと成功率 | 図3：長いチャンクでの失敗の型（目視と自動分類） |
 |---|---|
 | ![cost](results/figures/fig2_cost_tradeoff.png) | ![failure](results/figures/fig3_failure_types.png) |
 
@@ -41,16 +42,19 @@ Physical AI 講座 応用編1（MLOps・RobOps）の最終課題として作成�
 | 試行数 | 各条件 × スイートで 10タスク × 10エピソード × 3シード（1000/2000/3000）= 300 エピソード |
 | 評価 | LeRobot v0.6.1 の `lerobot-eval`（`init_states=true`。同じシードなら条件間で初期状態が一致） |
 | 統計 | 成功率の Wilson 95%信頼区間。同一初期状態の組で n_action_steps=10 と比較する McNemar 正確検定（Holm 補正） |
+| 再現性 | 同じシードでも GPU 計算の細かな揺れで個々のエピソードの成否は完全には一致しないため、3シードの平均で評価 |
 | 実行環境 | Ubuntu 24.04, NVIDIA RTX PRO 4000 Blackwell SFF Edition (24GB), PyTorch 2.11 + CUDA 13.0（詳細は `env/`） |
 
 ## 工夫した点（MLOps / RobOps の観点）
 
-- **設定ファイル駆動の評価パイプライン**：条件を YAML に並べるだけで、評価・記録・集計・図の作成まで一括で実行。
+- **設定ファイル駆動の評価パイプライン**：条件を YAML に並べるだけで、全条件の評価と記録を一括で実行。集計・図はそれぞれスクリプト1本で再生成できる。
 - **中断・再開に強い**：完了済みの条件は `eval_info.json` の有無で判定してスキップ。夜間・日中の長時間実行（計約18時間）を安全に分割できた。
 - **実験の追跡**：実行ごとに条件・成功率・所要時間・リポジトリのコミット・各ライブラリのバージョン・GPU を `results/runs.csv` に記録。
 - **再現性**：環境（pip / conda / OS / GPU / ドライバ）を `env/` に記録。LeRobot はリリースタグに固定。
 - **対応のある統計比較**：初期状態を固定し、同じ初期状態どうしで条件を比べることで、少ない差でも検出できるようにした。
 - **失敗の可視化と分類**：「10では成功・50では失敗」した組を自動抽出し、成功／失敗を並べたコマ割り画像と分類表を自動生成。
+- **ログによる失敗の自動分類**：LeRobot v0.6.1 の記録機能（`--eval.recording`）は LIBERO の観測名を扱えないため、環境をラップしてグリッパー開度・手先位置・対象物体の位置を記録し、
+  掴み損ね／落下／置けない／その他を自動判定した（目視分類との一致率82%）。
 
 ## リポジトリ構成
 
@@ -60,18 +64,23 @@ configs/
   main.yaml           本評価（5/10/25/50）
   main_knee.yaml      追加評価（15/20）
   main_short.yaml     追加評価（2）
+  rec.yaml / rec2.yaml  失敗分析用の再評価（10/50、シード1000、状態ログ付き）
 scripts/
   run_experiments.py  条件グリッドに沿って lerobot-eval を実行・記録（再開可能）
   aggregate.py        集計（成功率・信頼区間・シード間ばらつき・McNemar 検定）
   make_figures.py     レポート用の図（results/figures/）
   list_pairs.py       「基準は成功・比較は失敗」した組の抽出
   make_contact_sheets.py  成功／失敗のコマ割り画像と分類表の生成
+  eval_with_state_log.py  lerobot-eval を実行しつつ、グリッパー開度・手先位置・対象物体の位置を記録
+  classify_failures.py    グリッパー開度による掴み損ねの判定
+  classify_failures_objects.py  物体位置による失敗の4分類（MISS / DROP / PLACE / OTHER）
 env/                  実行環境の記録（export_env.sh で生成）
 results/
   runs.csv            全実行の履歴
   summary.csv / summary_overall.csv / paired_tests.csv / episodes.csv
   raw/<実験>/<スイート>/nasXX/seedYYYY/eval_info.json   各条件の生データ（動画は容量のため除外）
-  pairs/              失敗の分類表とコマ割り画像
+  pairs/              目視の分類表とコマ割り画像
+  auto_labels*.csv    自動分類の結果
   figures/            図
 ```
 
@@ -96,9 +105,14 @@ python scripts/run_experiments.py configs/main_short.yaml
 python scripts/aggregate.py
 python scripts/make_figures.py
 
-# 4. 失敗の分析（例：libero_object で 10 成功 / 50 失敗の組）
+# 4. 失敗の分析（目視用：libero_object で 10 成功 / 50 失敗の組）
 python scripts/list_pairs.py --suite libero_object --ref 10 --cmp 50
 python scripts/make_contact_sheets.py results/pairs/libero_object_ref10_cmp50.csv --limit 10
+
+# 5. 失敗の自動分類（状態ログ付きで再評価してから分類）
+python scripts/run_experiments.py configs/rec2.yaml
+python scripts/classify_failures_objects.py --experiment rec2
+python scripts/make_figures.py
 ```
 
 所要時間の目安（RTX PRO 4000 SFF）：1条件（100エピソード）あたり n_action_steps=10 で約9分、2 で約27分（libero_10 はその約2倍）。
@@ -107,7 +121,7 @@ python scripts/make_contact_sheets.py results/pairs/libero_object_ref10_cmp50.cs
 
 - 評価は1つの学習済みチェックポイントとシミュレーションに限られる。実機では推論遅延が加わるため、最適値は変わりうる。
 - 所要時間には失敗エピソード（最大ステップまで走る）が含まれるため、成功率の低い条件ほど長めに出る。図2は推論回数の理論値で比較している。
-- 失敗の分類は40組のコマ割り画像による目視で、一部（確信度「低」）は判定が難しい。
+- 失敗の分類は目視と自動判定の組み合わせ。皿から落ちたボウルを「落下」と「置けない」のどちらとみるかなど、型の境界には判断が残る。
 - Real-Time Chunking（RTC）など、チャンク間をなめらかにつなぐ手法との比較は未実施（LeRobot v0.6.1 の `lerobot-eval` が使う `select_action` は RTC 非対応）。
 
 ## 謝辞・ライセンス
